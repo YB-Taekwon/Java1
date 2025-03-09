@@ -12,7 +12,7 @@ class PaymentServiceTest {
     @Test
     void processPaymentSuccess() {
         // given
-        PayRequest payRequest = new PayRequest(ConvenienceStoreType.G25, 3500);
+        PayRequest payRequest = new PayRequest(PayMethodType.MONEY, ConvenienceStoreType.G25, 3500);
 
         // when
         PayResponse payResponse = paymentService.processPayment(payRequest);
@@ -25,7 +25,7 @@ class PaymentServiceTest {
     @Test
     void processPaymentFail() {
         // given
-        PayRequest payRequest = new PayRequest(ConvenienceStoreType.G25, 100_0001);
+        PayRequest payRequest = new PayRequest(PayMethodType.MONEY, ConvenienceStoreType.G25, 100_0001);
 
         // when
         PayResponse payResponse = paymentService.processPayment(payRequest);
@@ -38,7 +38,7 @@ class PaymentServiceTest {
     @Test
     void canclePaymentSuccess() {
         // given
-        PayCancleRequest payCancleRequest = new PayCancleRequest(ConvenienceStoreType.G25, 3500);
+        PayCancleRequest payCancleRequest = new PayCancleRequest(PayMethodType.CARD, ConvenienceStoreType.G25, 3500);
 
         // when
         PayCancleResponse payCancleResponse = paymentService.canclePayment(payCancleRequest);
@@ -51,7 +51,7 @@ class PaymentServiceTest {
     @Test
     void canclePaymentFail() {
         // given
-        PayCancleRequest payCancleRequest = new PayCancleRequest(ConvenienceStoreType.G25, 50);
+        PayCancleRequest payCancleRequest = new PayCancleRequest(PayMethodType.CARD, ConvenienceStoreType.G25, 50);
 
         // when
         PayCancleResponse payCancleResponse = paymentService.canclePayment(payCancleRequest);

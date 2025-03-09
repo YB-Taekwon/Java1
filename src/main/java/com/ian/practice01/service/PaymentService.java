@@ -5,16 +5,23 @@ import com.ian.practice01.type.*;
 
 // 결제 서비스(편결이)
 public class PaymentService {
-    // 머니 어댑터 의존성 주입
-    private static final MoneyAdapter moneyAdapter = new MoneyAdapter();
+    private static PaymentInterface paymentInterface;
 
     // 결제 기능 메서드
     public PayResponse processPayment(PayRequest payRequest) {
         Integer amount = payRequest.getAmount();
-        MoneyUseResult moneyUseResult = moneyAdapter.useMoney(amount);
+
+        // 결제 수단에 따른 어댑터 변경
+        if (payRequest.getPayMethod() == PayMethodType.MONEY) {
+            paymentInterface = new MoneyAdapter();
+        } else {
+            paymentInterface = new CardAdapter();
+        }
+
+        PaymentResult paymentResult = paymentInterface.payment(amount);
 
         // Fail Fast
-        if(moneyUseResult == MoneyUseResult.MONEY_USE_FAIL) {
+        if (paymentResult == PaymentResult.PAYMENT_FAIL) {
             return new PayResponse(PayResult.PAY_FAIL, 0);
         }
         // Success Case(Only One)
@@ -23,10 +30,17 @@ public class PaymentService {
 
     // 결제 취소 기능 메서드
     public PayCancleResponse canclePayment(PayCancleRequest payCancleRequest) {
-        MoneyUseCancleResult moneyUseCancleResult = moneyAdapter.cancleUseMoney(payCancleRequest.getCancleAmount());
+        // 결제 수단에 따른 어댑터 변경
+        if (payCancleRequest.getPayMethodType() == PayMethodType.MONEY) {
+            paymentInterface = new MoneyAdapter();
+        } else {
+            paymentInterface = new CardAdapter();
+        }
+
+        PaymentCancleResult paymentCancleResult = paymentInterface.paymentCancle(payCancleRequest.getCancleAmount());
 
         // Fail Fast
-        if(moneyUseCancleResult == MoneyUseCancleResult.MONEY_USE_CANCLE_FAIL) {
+        if (paymentCancleResult == PaymentCancleResult.PAYMENT_CANCLE_FAIL) {
             return new PayCancleResponse(PayCancleResult.PAY_CANCLE_FAIL, 0);
         }
         // Success Case(Only One)
