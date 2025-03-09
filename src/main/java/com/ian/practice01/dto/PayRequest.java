@@ -33,11 +33,11 @@ public class PayRequest {
         this.amount = amount;
     }
 
-    public PayMethodType getPayMethod() {
+    public PayMethodType getPayMethodType() {
         return payMethodType;
     }
 
-    public void setPayMethod(PayMethodType payMethodType) {
+    public void setPayMethodType(PayMethodType payMethodType) {
         this.payMethodType = payMethodType;
     }
 }
